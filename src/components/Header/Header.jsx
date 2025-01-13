@@ -2,11 +2,15 @@ import React, { useState, useRef, useEffect } from 'react';
 import s from './Header.module.scss';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
+import { useAppContext } from '../../context';
 
 const Header = () => {
+
+  const {isCard1, isCard2, toggleOpen1, toggleOpen2} = useAppContext()
+
+
   const [isActive, setIsActive] = useState(false);
   const [prevSlideImage, setPrevSlideImage] = useState('/moto-2.png'); // Начальное изображение
-
 
   const swiperRef = useRef(null);
 
@@ -15,49 +19,47 @@ const Header = () => {
     { id: 2, title: 'DUГATI', img: '/moto-2.png', details: '168 CV, 274 km/h, Twin Pulse' },
   ];
 
-  
-  
-  
   const toggleSearch = () => {
-      setIsActive(!isActive);
-    };
-    
-    const onInputFocus = (e) => {
-        e.stopPropagation();
-        setIsActive(true);
-    };
-    
-    const handleNext = () => {
-        if (swiperRef.current) {
-            swiperRef.current.slideNext();
-        }
-    };
-    
-    const handlePrev = () => {
-        if (swiperRef.current) {
-            swiperRef.current.slidePrev();
-        }
-    };
-    
-    const updatePrevSlideImage = () => {
-      if (swiperRef.current) {
-        const swiper = swiperRef.current;
-        const activeIndex = swiper.realIndex; // Получить индекс текущего слайда
-        const prevIndex = (activeIndex - 1 + slides.length) % slides.length; // Индекс предыдущего слайда
-        setPrevSlideImage(slides[prevIndex].img);
-      }
-    };
-  
-    useEffect(() => {
-      if (swiperRef.current) {
-        const swiper = swiperRef.current;
-        swiper.on('slideChange', updatePrevSlideImage);
-        updatePrevSlideImage(); // Обновить изображение при первом рендере
-      }
-    }, []);
+    setIsActive(!isActive);
+  };
 
-    return (
-        <>
+  const onInputFocus = (e) => {
+    e.stopPropagation();
+    setIsActive(true);
+  };
+
+  const handleNext = () => {
+    if (swiperRef.current) {
+      swiperRef.current.slideNext();
+    }
+  };
+
+  const handlePrev = () => {
+    if (swiperRef.current) {
+      swiperRef.current.slidePrev();
+    }
+  };
+
+
+  const updatePrevSlideImage = () => {
+    if (swiperRef.current) {
+      const swiper = swiperRef.current;
+      const activeIndex = swiper.realIndex; // Получить индекс текущего слайда
+      const prevIndex = (activeIndex - 1 + slides.length) % slides.length; // Индекс предыдущего слайда
+      setPrevSlideImage(slides[prevIndex].img);
+    }
+  };
+
+  useEffect(() => {
+    if (swiperRef.current) {
+      const swiper = swiperRef.current;
+      swiper.on('slideChange', updatePrevSlideImage);
+      updatePrevSlideImage(); // Обновить изображение при первом рендере
+    }
+  }, []);
+
+  return (
+    <>
       <header className={s.header}>
         <nav className={s.nav}>
           <a className={s.logo} href="">DUCATI</a>
@@ -84,7 +86,7 @@ const Header = () => {
             <SwiperSlide>
               <div className={s.card}>
                 <button className={s.next} onClick={handleNext}>
-                  <img src="/next.svg" alt="" />
+                  <img src="/arrow.svg" alt="" />
                 </button>
 
                 <div className={s.box}>
@@ -92,7 +94,7 @@ const Header = () => {
                     DUCATI
                     <img src="/moto-1.png" alt="moto" />
                   </h1>
-                  <button>Read more</button>
+                  <button onClick={toggleOpen1}>Read more</button>
                 </div>
 
                 <div className={s.inner}>
@@ -112,7 +114,7 @@ const Header = () => {
             <SwiperSlide>
               <div className={s.card}>
                 <button className={s.next} onClick={handleNext}>
-                  <img src="/next.svg" alt="" />
+                  <img src="/arrow.svg" alt="" />
                 </button>
 
                 <div className={s.box}>
@@ -120,7 +122,7 @@ const Header = () => {
                     DUГATI
                     <img src="/moto-2.png" alt="moto" />
                   </h1>
-                  <button>Read more</button>
+                  <button onClick={toggleOpen2}>Read more</button>
                 </div>
 
                 <div className={s.inner}>
